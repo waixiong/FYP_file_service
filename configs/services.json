@@ -1,0 +1,13 @@
+{
+    "services": [
+        {
+            "service": "auth",
+            "methods": {
+                "thirdpartysignin" : {},
+                "signin" : {},
+                "signup" : {}
+            },
+            "port": 9000
+        }
+    ]
+}

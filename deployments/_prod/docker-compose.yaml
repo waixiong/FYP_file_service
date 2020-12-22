@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  investhack_rest:
+    image: getitqec/investhack
+    restart: always
+    networks:
+      - server
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "3"
+    # ports: 
+    #   - 8101:8101
+    command: [ "/cmd/server" ]
+    env_file: .env
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=server
+      - traefik.http.services.investhack_rest.loadbalancer.server.port=8091
+      # - traefik.http.routers.investhack_rest.entrypoints=http
+      # - traefik.http.routers.investhack_rest.middlewares=redirect@file
+      - traefik.http.routers.investhack_rest.rule=Host(`api.getitqec.com`) && PathPrefix(`/api/user/`)
+      # - traefik.http.routers.investhack_rest.rule=Host(`catalog_api-staging.getitqec.com`)
+      - traefik.http.routers.investhack_rest.entrypoints=https
+      - traefik.http.routers.investhack_rest.tls.certresolver=mytlschallenge
+      - traefik.http.routers.investhack_rest.middlewares=compressor@file #,api-header@file
+      
+    container_name: investhack_rest
+  
+    investhack_grpc:
+    image: getitqec/catalog
+    restart: always
+    networks:
+      - server
+    logging:
+      options:
+        max-size: "100k"
+        max-file: "3"
+    # ports: 
+    #   - 8101:8101
+    command: [ "/cmd/server" ]
+    env_file: .env
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=server
+
+      - traefik.http.services.investhack_grpc.loadbalancer.server.port=8090
+      - traefik.http.services.investhack_grpc.loadbalancer.server.scheme=https
+      - traefik.http.routers.investhack_grpc.rule=Host(`grpc-prod.getitqec.com`) && PathPrefix(`/catalogproto.UserService/`)
+      # - traefik.http.routers.investhack_grpc.rule=Host(`catalog_api-staging.getitqec.com`)
+      - traefik.http.routers.investhack_grpc.entrypoints=grpc
+      - traefik.http.routers.investhack_grpc.tls.certresolver=mytlschallenge
+
+      # - traefik.tls.certificates.certFile=""
+      # - traefik.tls.certificates.keyFile=""
+    container_name: investhack_grpc
+
+networks:
+  server:
+    external: true

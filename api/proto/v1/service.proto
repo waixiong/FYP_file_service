@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+// import "protoc-gen-swagger/options/annotations.proto";
+import "protoc-gen-openapiv2/options/annotations.proto";
+// import "google/protobuf/empty.proto";
+
+// option java_multiple_files = true;
+// option java_package = "com.getitqec.Fileproto";
+// option java_outer_classname = "FileService";
+
+option go_package = ".;serviceproto";
+
+package serviceproto;
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+	info: {
+		title: "File service";
+		version: "1.0";
+		contact: {
+			name: "getitqec file service";
+			url: "https://getitqec.com";
+			email: "wx.Chee@getiqec.com";
+        };
+    };
+    schemes: HTTPS;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+service FileService {
+    // UploadImage
+    rpc uploadFile (stream UploadImageRequestStream) returns (Acknowledgement) {
+        option (google.api.http) = {
+            post: "/api/file/file"
+            body: "*"
+        };
+    }
+    
+    // DownloadImage
+    rpc downloadFile (DownloadImageRequest) returns (stream DownloadImageReponseStream) {
+        option (google.api.http) = {
+            get: "/api/file/file/{name}"
+        };
+    }
+
+    // UploadImage
+    rpc uploadImage (UploadImageRequest) returns (Acknowledgement) {
+        option (google.api.http) = {
+            post: "/api/file/s"
+            body: "*"
+        };
+    }
+    
+    // DownloadImage
+    rpc downloadImage (DownloadImageRequest) returns (DownloadImageReponse) {
+        option (google.api.http) = {
+            get: "/api/file/s"
+        };
+    }
+}
+
+message UploadImageRequestStream{
+    oneof data {
+        string name = 2;
+        bytes image = 1;
+    }
+}
+
+message Acknowledgement {
+    string ack = 1;
+}
+
+message DownloadImageRequestStream {
+    string name = 1;
+}
+
+message DownloadImageReponseStream{
+    bytes image = 1;
+}
+
+message UploadImageRequest{
+    string bucket = 1;
+    string name = 2;
+    bytes image = 3;
+}
+
+message DownloadImageRequest {
+    string bucket = 1;
+    string name = 2;
+    string id = 3;
+}
+
+message DownloadImageReponse{
+    string name = 1;
+    bytes image = 2;
+}
