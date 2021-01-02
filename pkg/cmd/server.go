@@ -98,9 +98,9 @@ func RunServer() error {
 	// run HTTP gateway
 	go func() {
 		fmt.Println("Run REST")
-		// _ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort, certFilePath, keyFilePath)
+		_ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort, certFilePath, keyFilePath)
 		// _ = rest.RunCustomServer(ctx, cfg.GRPCPort, cfg.HTTPPort, certFilePath, keyFilePath)
-		_ = rest.RunCustomServer(ctx, cfg.GRPCPort, cfg.HTTPPort, "", "")
+		// _ = rest.RunCustomServer(ctx, cfg.GRPCPort, cfg.HTTPPort, "", "")
 	}()
 	// fmt.Println("Run REST")
 	// _ = rest.RunServer(ctx, cfg.GRPCPort, cfg.HTTPPort, certFilePath, keyFilePath)

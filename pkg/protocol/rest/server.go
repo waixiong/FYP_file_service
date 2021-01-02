@@ -112,7 +112,7 @@ func RunServer(ctx context.Context, grpcPort, httpPort, certFilePath string, key
 
 	fmt.Println("starting HTTP/REST gateway...")
 	logger.Log.Info("starting HTTP/REST gateway...")
-	return srv.ListenAndServeTLS(certFilePath, keyFilePath)
+	return srv.ListenAndServe()
 }
 
 func RunCustomServer(ctx context.Context, grpcPort, httpPort, certFilePath string, keyFilePath string) error {
@@ -145,6 +145,7 @@ func RunCustomServer(ctx context.Context, grpcPort, httpPort, certFilePath strin
 
 	cert, err := tls.LoadX509KeyPair(certFilePath, keyFilePath)
 	if err != nil {
+		log.Println(certFilePath)
 		log.Println(err)
 		return err
 	}

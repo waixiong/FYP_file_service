@@ -83,7 +83,7 @@ func (m *FileModel) DownloadFile(ctx context.Context, name string) ([]byte, erro
 
 func (m *FileModel) UploadImage(ctx context.Context, bucketName string, name string, data []byte) (string, error) {
 	key := aws.String(name)
-	bucket := aws.String(bucketName)
+	bucket := aws.String("testBuc")
 	contentType := aws.String(http.DetectContentType(data))
 	// contentType := aws.String("image/webp")
 	logger.Log.Debug(fmt.Sprintf("bytes: %d", len(data)))

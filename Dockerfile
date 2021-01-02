@@ -1,6 +1,7 @@
 FROM golang:1.13-alpine AS build_base
 
 RUN apk add --no-cache git
+RUN apk add build-base
 
 WORKDIR /tmp/service
 
@@ -19,12 +20,10 @@ RUN apk add ca-certificates tzdata
 
 COPY --from=build_base /tmp/service/out/server /cmd/server
 
-EXPOSE 80
-EXPOSE 443
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 8110
+EXPOSE 8111
 
-# COPY configs /configs/
+COPY configs /configs/
 COPY .env .
 
 CMD ["/cmd/server"]

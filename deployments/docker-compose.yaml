@@ -54,20 +54,20 @@ services:
       options:
         max-size: "100k"
         max-file: "3"
-    ports: 
-      - 8091:8091
+    # ports: 
+    #   - 8091:8091
     # command: [ "./cmd/server" ]
     labels:
       - traefik.enable=true
       - traefik.docker.network=server
 
-      - traefik.http.services.imagechat_file_rest.loadbalancer.server.port=8091
+      - traefik.http.services.imagechat_file_rest.loadbalancer.server.port=8111
       - traefik.http.routers.imagechat_file_rest.service=imagechat_file_rest
       - traefik.http.routers.imagechat_file_rest.rule=Host(`imagechat.getitqec.com`) && PathPrefix(`/api/file/`)
       - traefik.http.routers.imagechat_file_rest.entrypoints=https
       - traefik.http.routers.imagechat_file_rest.tls.certresolver=mytlschallenge
 
-      - traefik.http.services.imagechat_file_grpc.loadbalancer.server.port=8090
+      - traefik.http.services.imagechat_file_grpc.loadbalancer.server.port=8110
       - traefik.http.services.imagechat_file_grpc.loadbalancer.server.scheme=https
       - traefik.http.routers.imagechat_file_grpc.service=imagechat_file_grpc
       - traefik.http.routers.imagechat_file_grpc.rule=Host(`imagechat.getitqec.com`) && PathPrefix(`/serviceproto.FileService/`)
